@@ -1,0 +1,27 @@
+# Конфигурационные файлы с паролями
+config/database.php
+
+# Логи
+*.log
+log.txt
+
+# Временные файлы
+*.tmp
+*.temp
+
+# Файлы операционной системы
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE файлы
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Backup файлы
+*.bak
+*.backup
+

@@ -1,0 +1,17 @@
+# Включение обработки PHP файлов
+AddHandler application/x-httpd-php .php
+
+# Защита конфигурационных файлов
+<FilesMatch "^(config|database)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Настройка кодировки
+AddDefaultCharset UTF-8
+
+# Включение обработки ошибок (для разработки)
+php_flag display_errors On
+php_value error_reporting E_ALL
+
+
