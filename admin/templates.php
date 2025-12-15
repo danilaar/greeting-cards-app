@@ -6,7 +6,6 @@ $pdo = getDBConnection();
 $error = '';
 $success = '';
 
-// Функция генерации HTML и CSS из параметров формы
 function generateTemplateHTML($data) {
     $html = '<div class="generated-card">';
     
@@ -30,7 +29,6 @@ function generateTemplateHTML($data) {
         $html .= '<p class="card-signature">' . htmlspecialchars($data['signature']) . '</p>';
     }
     
-    // Для приглашений добавляем дополнительные поля
     if ($data['type'] === 'invitation') {
         if (!empty($data['date'])) {
             $html .= '<p class="card-date">Дата: ' . htmlspecialchars($data['date']) . '</p>';
@@ -119,20 +117,17 @@ function generateTemplateCSS($data) {
     return $css;
 }
 
-// Создание шаблона
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_template'])) {
     $name = $_POST['name'] ?? '';
     $type = $_POST['type'] ?? '';
     
     if ($name && $type) {
-        // Генерируем HTML и CSS из данных формы
         $html_content = generateTemplateHTML($_POST);
         $css_content = generateTemplateCSS($_POST);
         
         $stmt = $pdo->prepare("INSERT INTO templates (name, type, html_content, css_content, created_by) VALUES (?, ?, ?, ?, ?)");
         if ($stmt->execute([$name, $type, $html_content, $css_content, $_SESSION['user_id']])) {
             $success = 'Шаблон успешно создан!';
-            // Очищаем форму после успешного создания
             $_POST = [];
         } else {
             $error = 'Ошибка при создании шаблона';
@@ -142,7 +137,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_template'])) {
     }
 }
 
-// Удаление шаблона
 if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
     $stmt = $pdo->prepare("UPDATE templates SET is_active = FALSE WHERE id = ?");
@@ -150,7 +144,6 @@ if (isset($_GET['delete'])) {
     $success = 'Шаблон удален';
 }
 
-// Получение всех шаблонов
 $stmt = $pdo->query("SELECT * FROM templates ORDER BY created_at DESC");
 $templates = $stmt->fetchAll();
 
@@ -307,7 +300,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const invitationFields = document.getElementById('invitationFields');
     const preview = document.getElementById('templatePreview');
     
-    // Градиенты
     const gradients = {
         purple: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         pink: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
@@ -319,7 +311,6 @@ document.addEventListener('DOMContentLoaded', function() {
         ocean: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
     };
     
-    // Показать/скрыть поля приглашения
     function toggleInvitationFields() {
         if (typeSelect.value === 'invitation') {
             invitationFields.style.display = 'block';
@@ -330,9 +321,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     typeSelect.addEventListener('change', toggleInvitationFields);
-    toggleInvitationFields(); // Инициализация
+    toggleInvitationFields();
     
-    // Обновление предпросмотра
     function updatePreview() {
         const formData = new FormData(form);
         const data = {};

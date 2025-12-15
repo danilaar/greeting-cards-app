@@ -5,7 +5,6 @@ requireLogin();
 $template_id = $_GET['template_id'] ?? 0;
 $pdo = getDBConnection();
 
-// Получение шаблона
 $stmt = $pdo->prepare("SELECT * FROM templates WHERE id = ? AND is_active = TRUE");
 $stmt->execute([$template_id]);
 $template = $stmt->fetch();
@@ -15,7 +14,6 @@ if (!$template) {
     exit;
 }
 
-// Сохранение открытки
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_card'])) {
     $title = $_POST['title'] ?? 'Без названия';
     $html_content = $_POST['html_content'] ?? '';
@@ -63,14 +61,12 @@ include 'includes/header.php';
 </div>
 
 <script>
-// Делаем текст редактируемым
 document.addEventListener('DOMContentLoaded', function() {
     const preview = document.getElementById('card-preview');
     const htmlInput = document.getElementById('html_content');
     const cssInput = document.getElementById('css_content');
     const styleElement = document.getElementById('template-style');
     
-    // Делаем все элементы с текстом редактируемыми
     function makeEditable(element) {
         if (element.children.length === 0 && element.textContent.trim()) {
             element.contentEditable = true;
@@ -87,16 +83,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     makeEditable(preview);
     
-    // Сохранение при отправке формы
     document.getElementById('saveForm').addEventListener('submit', function() {
         updateContent();
     });
     
-    // Инициализация значений
     updateContent();
 });
 </script>
 
 <?php include 'includes/footer.php'; ?>
+
+
 
 
